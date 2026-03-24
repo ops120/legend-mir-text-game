@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热血传奇 - 网页版</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 热血传奇 🔥</h1>
+            <div class="subtitle">网页文字版 - 经典复刻</div>
+        </header>
+        
+        <div class="gold-display">
+            💰 金币: <span id="gold-amount">0</span>
+        </div>
+        
+        <div class="game-area">
+            <div class="main-content">
+                <div class="characters-container" id="characters-container">
+                </div>
+                
+                <div class="battle-area">
+                    <div class="battle-title">⚔️ 战斗区域 ⚔️</div>
+                    <div id="monsters-container"></div>
+                    <div class="battle-log" id="battle-log"></div>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-section">
+                        <div class="panel-title">🏰 地图选择</div>
+                        <div class="map-list" id="map-list"></div>
+                    </div>
+                    
+                    <div class="control-section">
+                        <div class="panel-title">⚡ 游戏控制</div>
+                        <button class="start-battle" id="start-battle">🎮 开始战斗</button>
+                        <button class="auto-battle" id="auto-battle">🤖 自动战斗</button>
+                        <button class="stop-battle" id="stop-battle">⏹️ 停止</button>
+                        
+                        <div class="speed-control">
+                            <span>⚡ 战斗速度:</span>
+                            <button class="speed-btn" id="speed-down">◀</button>
+                            <span class="current-speed" id="speed-display">1x</span>
+                            <button class="speed-btn" id="speed-up">▶</button>
+                            <button class="speed-btn" id="unlock-speed" style="background: linear-gradient(145deg, #ffd700, #ffaa00); font-size: 0.8rem; padding: 8px 12px;">🔓 购买</button>
+                            <button class="speed-btn" id="show-speed-info" style="background: linear-gradient(145deg, #4ecdc4, #3dbdb5); font-size: 0.8rem; padding: 8px 12px;" onclick="window.open('speed-unlock.html', '_blank')">📖 详情</button>
+                        </div>
+                        <div id="speed-info" style="font-size: 0.85rem; color: #888; margin-top: 8px;">
+                            <div id="speed-description">正常速度 - 未激活</div>
+                            <div id="unlock-hint" style="color: #888; margin-top: 5px;">💡 点击购买激活加速服务</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="side-panel">
+                <div class="panel-title">🎒 背包</div>
+                <div class="backpack">
+                    <div class="backpack-title">物品栏 (<span id="backpack-count">0</span>/40)</div>
+                    <div class="backpack-grid" id="backpack-grid"></div>
+                    <div style="margin-top: 10px; display: flex; gap: 5px;">
+                        <button id="sell-all-equipment" style="flex: 1; background: linear-gradient(145deg, #ffd700, #ffaa00); font-size: 0.85rem; padding: 8px;">
+                            💰 一键出售装备
+                        </button>
+                        <button id="sell-selected" style="flex: 1; background: linear-gradient(145deg, #ff6b6b, #ee5a5a); font-size: 0.85rem; padding: 8px;">
+                            🔥 出售选中
+                        </button>
+                    </div>
+                    <div id="sell-preview" style="margin-top: 8px; font-size: 0.85rem; color: #ffd700; text-align: center;"></div>
+                </div>
+                
+                <div class="panel-title" style="margin-top: 20px;">📊 游戏统计</div>
+                <div class="stat-item">击杀怪物: <span id="total-kills">0</span></div>
+                <div class="stat-item">游戏时间: <span id="game-time">0</span></div>
+                <div class="stat-item">自动战斗: <span id="auto-battle-status">关闭</span></div>
+                
+                <div class="panel-title" style="margin-top: 20px;">💾 数据管理</div>
+                <button id="save-game" style="width: 100%;">💾 保存游戏</button>
+                <button id="load-game" style="width: 100%;">📂 读取存档</button>
+                <div style="margin-top: 15px; padding: 10px; background: rgba(255, 217, 61, 0.1); border-radius: 8px; border: 1px solid #ffd700;">
+                    <div style="color: #ffd700; font-size: 0.9rem; margin-bottom: 8px;">📤 存档迁移</div>
+                    <button id="export-save" style="width: 100%; background: linear-gradient(145deg, #4ecdc4, #3dbdb5);">💾 导出存档</button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button id="import-save" style="width: 100%; background: linear-gradient(145deg, #45b7d1, #3498db); margin-top: 5px;">📂 导入存档</button>
+                    <div style="font-size: 0.75rem; color: #888; margin-top: 8px;">导出前请先确保角色数据已保存到浏览器</div>
+                </div>
+                <button id="reset-game" style="width: 100%; margin-top: 15px; background: linear-gradient(145deg, #ff4444, #cc3333);">🔄 重置游戏</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="item-tooltip" id="item-tooltip"></div>
+    
+    <script src="js/data.js"></script>
+    <script src="js/save.js"></script>
+    <script src="js/game.js"></script>
+
+</body>
+</html>

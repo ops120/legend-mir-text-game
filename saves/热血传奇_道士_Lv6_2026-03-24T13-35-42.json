@@ -1,0 +1,1135 @@
+{
+  "version": "1.0",
+  "gameState": {
+    "characters": [
+      {
+        "id": "warrior",
+        "name": "战士",
+        "class": "warrior",
+        "level": 1,
+        "exp": 0,
+        "maxExp": 100,
+        "hp": 180,
+        "maxHp": 180,
+        "mp": 30,
+        "maxMp": 30,
+        "attack": 20,
+        "defense": 25,
+        "magicDefense": 12.5,
+        "equipment": {
+          "weapon": null,
+          "armor": null,
+          "helmet": null,
+          "necklace": null,
+          "ring1": null,
+          "ring2": null
+        },
+        "skills": [
+          {
+            "skillId": 1,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 15,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 26,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 35,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 47,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 58,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 70,
+            "level": 1,
+            "cooldown": 0
+          }
+        ],
+        "buffs": [],
+        "isDead": false
+      },
+      {
+        "id": "mage",
+        "name": "法师",
+        "class": "mage",
+        "level": 1,
+        "exp": 0,
+        "maxExp": 100,
+        "hp": 120,
+        "maxHp": 120,
+        "mp": 80,
+        "maxMp": 80,
+        "attack": 28,
+        "defense": 12,
+        "magicDefense": 6,
+        "equipment": {
+          "weapon": null,
+          "armor": null,
+          "helmet": null,
+          "necklace": null,
+          "ring1": null,
+          "ring2": null
+        },
+        "skills": [
+          {
+            "skillId": 1,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 13,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 24,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 35,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 41,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 47,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 58,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 70,
+            "level": 1,
+            "cooldown": 0
+          }
+        ],
+        "buffs": [],
+        "isDead": false
+      },
+      {
+        "id": "taoist",
+        "name": "道士",
+        "class": "taoist",
+        "level": 6,
+        "exp": 533,
+        "maxExp": 600,
+        "hp": 64,
+        "maxHp": 260,
+        "mp": 60,
+        "maxMp": 110,
+        "attack": 50.5,
+        "defense": 45.5,
+        "magicDefense": 16.5,
+        "equipment": {
+          "weapon": {
+            "id": 1774359306096.4553,
+            "name": "铁剑",
+            "type": "weapon",
+            "quality": "white",
+            "level": 2,
+            "attack": 7
+          },
+          "armor": {
+            "id": 1774359294441.0642,
+            "name": "轻甲",
+            "type": "armor",
+            "quality": "white",
+            "level": 2,
+            "defense": 4.5
+          },
+          "helmet": {
+            "id": 1774359295473.6572,
+            "name": "皮帽",
+            "type": "helmet",
+            "quality": "white",
+            "level": 1,
+            "defense": 3
+          },
+          "necklace": {
+            "id": 1774359307229.5286,
+            "name": "铜项链",
+            "type": "necklace",
+            "quality": "white",
+            "level": 3,
+            "defense": 5
+          },
+          "ring1": {
+            "id": 1774359298225.3638,
+            "name": "铜戒指",
+            "type": "ring",
+            "quality": "white",
+            "level": 1,
+            "attack": 3
+          },
+          "ring2": {
+            "id": 1774359325866.979,
+            "name": "铜戒指",
+            "type": "ring",
+            "quality": "white",
+            "level": 4,
+            "attack": 6
+          }
+        },
+        "skills": [
+          {
+            "skillId": 1,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 18,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 26,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 33,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 38,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 44,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 52,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 65,
+            "level": 1,
+            "cooldown": 0
+          },
+          {
+            "skillId": 70,
+            "level": 1,
+            "cooldown": 0
+          }
+        ],
+        "buffs": [],
+        "isDead": false
+      }
+    ],
+    "selectedCharacter": {
+      "id": "taoist",
+      "name": "道士",
+      "class": "taoist",
+      "level": 6,
+      "exp": 533,
+      "maxExp": 600,
+      "hp": 64,
+      "maxHp": 260,
+      "mp": 60,
+      "maxMp": 110,
+      "attack": 50.5,
+      "defense": 45.5,
+      "magicDefense": 16.5,
+      "equipment": {
+        "weapon": {
+          "id": 1774359306096.4553,
+          "name": "铁剑",
+          "type": "weapon",
+          "quality": "white",
+          "level": 2,
+          "attack": 7
+        },
+        "armor": {
+          "id": 1774359294441.0642,
+          "name": "轻甲",
+          "type": "armor",
+          "quality": "white",
+          "level": 2,
+          "defense": 4.5
+        },
+        "helmet": {
+          "id": 1774359295473.6572,
+          "name": "皮帽",
+          "type": "helmet",
+          "quality": "white",
+          "level": 1,
+          "defense": 3
+        },
+        "necklace": {
+          "id": 1774359307229.5286,
+          "name": "铜项链",
+          "type": "necklace",
+          "quality": "white",
+          "level": 3,
+          "defense": 5
+        },
+        "ring1": {
+          "id": 1774359298225.3638,
+          "name": "铜戒指",
+          "type": "ring",
+          "quality": "white",
+          "level": 1,
+          "attack": 3
+        },
+        "ring2": {
+          "id": 1774359325866.979,
+          "name": "铜戒指",
+          "type": "ring",
+          "quality": "white",
+          "level": 4,
+          "attack": 6
+        }
+      },
+      "skills": [
+        {
+          "skillId": 1,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 18,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 26,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 33,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 38,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 44,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 52,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 65,
+          "level": 1,
+          "cooldown": 0
+        },
+        {
+          "skillId": 70,
+          "level": 1,
+          "cooldown": 0
+        }
+      ],
+      "buffs": [],
+      "isDead": false
+    },
+    "currentMapIndex": 0,
+    "backpack": [
+      {
+        "id": 1774359330187.9734,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 3,
+        "defense": 4
+      },
+      {
+        "id": 1774359326074.6934,
+        "name": "铁剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 4,
+        "attack": 13
+      },
+      {
+        "id": 1774359326792.5935,
+        "name": "布衣",
+        "type": "armor",
+        "quality": "white",
+        "level": 2,
+        "defense": 4.5
+      },
+      {
+        "id": 1774359326903.3313,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 1,
+        "defense": 3
+      },
+      {
+        "id": 1774359327850.7314,
+        "name": "铜戒指",
+        "type": "ring",
+        "quality": "white",
+        "level": 4,
+        "attack": 5
+      },
+      {
+        "id": 1774359328068.5056,
+        "name": "轻甲",
+        "type": "armor",
+        "quality": "white",
+        "level": 4,
+        "defense": 10.5
+      },
+      {
+        "id": 1774359328909.4978,
+        "name": "铁剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 1,
+        "attack": 7
+      },
+      {
+        "id": 1774359329142.6616,
+        "name": "皮帽",
+        "type": "helmet",
+        "quality": "white",
+        "level": 5,
+        "defense": 6
+      },
+      {
+        "id": 1774359329361.8594,
+        "name": "皮帽",
+        "type": "helmet",
+        "quality": "white",
+        "level": 4,
+        "defense": 7
+      },
+      {
+        "id": 1774359330296.549,
+        "name": "轻甲",
+        "type": "armor",
+        "quality": "white",
+        "level": 1,
+        "defense": 6
+      },
+      {
+        "id": 1774359330402.8357,
+        "name": "铜戒指",
+        "type": "ring",
+        "quality": "white",
+        "level": 5,
+        "attack": 6
+      },
+      {
+        "id": 1774359331123.0183,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 3,
+        "defense": 4
+      },
+      {
+        "id": 1774359331227.6638,
+        "name": "铜戒指",
+        "type": "ring",
+        "quality": "white",
+        "level": 2,
+        "attack": 3
+      },
+      {
+        "id": 1774359332072.2144,
+        "name": "铁剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 3,
+        "attack": 13
+      },
+      {
+        "id": 1774359332183.5002,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 4,
+        "defense": 6
+      },
+      {
+        "id": 1774359332291.334,
+        "name": "木剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 1,
+        "attack": 7
+      },
+      {
+        "id": 1774359333148.0261,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 5,
+        "defense": 6
+      },
+      {
+        "id": 1774359333584.0557,
+        "name": "轻甲",
+        "type": "armor",
+        "quality": "white",
+        "level": 6,
+        "defense": 10.5
+      },
+      {
+        "id": 1774359333688.6292,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 4,
+        "defense": 5
+      },
+      {
+        "id": 1774359334515.9563,
+        "name": "铜戒指",
+        "type": "ring",
+        "quality": "white",
+        "level": 4,
+        "attack": 5
+      },
+      {
+        "id": 1774359334624.456,
+        "name": "布衣",
+        "type": "armor",
+        "quality": "white",
+        "level": 4,
+        "defense": 7.5
+      },
+      {
+        "id": 1774359334842.1687,
+        "name": "铜戒指",
+        "type": "ring",
+        "quality": "white",
+        "level": 2,
+        "attack": 5
+      },
+      {
+        "id": 1774359335554.7334,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 1,
+        "defense": 3
+      },
+      {
+        "id": 1774359335980.2495,
+        "name": "布衣",
+        "type": "armor",
+        "quality": "white",
+        "level": 6,
+        "defense": 10.5
+      },
+      {
+        "id": 1774359336193.8418,
+        "name": "轻甲",
+        "type": "armor",
+        "quality": "white",
+        "level": 5,
+        "defense": 10.5
+      },
+      {
+        "id": 1774359336918.8237,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 2,
+        "defense": 4
+      },
+      {
+        "id": 1774359337031.6108,
+        "name": "木剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 3,
+        "attack": 11
+      },
+      {
+        "id": 1774359337850.038,
+        "name": "铜项链",
+        "type": "necklace",
+        "quality": "white",
+        "level": 3,
+        "defense": 5
+      },
+      {
+        "id": 1774359337962.8442,
+        "name": "轻甲",
+        "type": "armor",
+        "quality": "white",
+        "level": 3,
+        "defense": 7.5
+      },
+      {
+        "id": 1774359338179.919,
+        "name": "铁剑",
+        "type": "weapon",
+        "quality": "white",
+        "level": 3,
+        "attack": 13
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "gold": 3294,
+    "battleActive": false,
+    "currentMonsters": [],
+    "battleLog": [
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359330508
+      },
+      {
+        "message": "⚔️ 遭遇 2 只怪物！",
+        "type": "info",
+        "time": 1774359331014
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 46 点伤害！",
+        "type": "damage",
+        "time": 1774359331122
+      },
+      {
+        "message": "击杀 钉耙猫！获得 11 经验，5 金币",
+        "type": "loot",
+        "time": 1774359331123
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+4）",
+        "type": "loot",
+        "time": 1774359331123
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 51 点伤害！",
+        "type": "damage",
+        "time": 1774359331226
+      },
+      {
+        "message": "击杀 钉耙猫！获得 10 经验，5 金币",
+        "type": "loot",
+        "time": 1774359331227
+      },
+      {
+        "message": "🎁 获得 普通装备：铜戒指（防御+3）",
+        "type": "loot",
+        "time": 1774359331228
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359331340
+      },
+      {
+        "message": "⚔️ 遭遇 3 只怪物！",
+        "type": "info",
+        "time": 1774359331856
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359331963
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359331964
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359332071
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 45 经验，18 金币",
+        "type": "loot",
+        "time": 1774359332072
+      },
+      {
+        "message": "🎁 获得 普通装备：铁剑（攻击+13）",
+        "type": "loot",
+        "time": 1774359332073
+      },
+      {
+        "message": "道士 攻击 多钩猫，造成 51 点伤害！",
+        "type": "damage",
+        "time": 1774359332181
+      },
+      {
+        "message": "击杀 多钩猫！获得 18 经验，9 金币",
+        "type": "loot",
+        "time": 1774359332183
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+6）",
+        "type": "loot",
+        "time": 1774359332184
+      },
+      {
+        "message": "道士 攻击 多钩猫，造成 46 点伤害！",
+        "type": "damage",
+        "time": 1774359332290
+      },
+      {
+        "message": "击杀 多钩猫！获得 13 经验，7 金币",
+        "type": "loot",
+        "time": 1774359332291
+      },
+      {
+        "message": "🎁 获得 普通装备：木剑（攻击+7）",
+        "type": "loot",
+        "time": 1774359332292
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359332400
+      },
+      {
+        "message": "⚔️ 遭遇 3 只怪物！",
+        "type": "info",
+        "time": 1774359332920
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 47 点伤害！",
+        "type": "damage",
+        "time": 1774359333025
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359333026
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 50 点伤害！",
+        "type": "damage",
+        "time": 1774359333147
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 45 经验，18 金币",
+        "type": "loot",
+        "time": 1774359333148
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+6）",
+        "type": "loot",
+        "time": 1774359333150
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 48 点伤害！",
+        "type": "damage",
+        "time": 1774359333255
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359333256
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 50 点伤害！",
+        "type": "damage",
+        "time": 1774359333359
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359333360
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 49 点伤害！",
+        "type": "damage",
+        "time": 1774359333475
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359333477
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359333583
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 50 经验，20 金币",
+        "type": "loot",
+        "time": 1774359333584
+      },
+      {
+        "message": "🎁 获得 普通装备：轻甲（防御+10.5）",
+        "type": "loot",
+        "time": 1774359333584
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 48 点伤害！",
+        "type": "damage",
+        "time": 1774359333687
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 40 经验，16 金币",
+        "type": "loot",
+        "time": 1774359333688
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+5）",
+        "type": "loot",
+        "time": 1774359333688
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359333794
+      },
+      {
+        "message": "⚔️ 遭遇 3 只怪物！",
+        "type": "info",
+        "time": 1774359334300
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 43 点伤害！",
+        "type": "damage",
+        "time": 1774359334404
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359334405
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359334515
+      },
+      {
+        "message": "击杀 钉耙猫！获得 12 经验，6 金币",
+        "type": "loot",
+        "time": 1774359334515
+      },
+      {
+        "message": "🎁 获得 普通装备：铜戒指（防御+5）",
+        "type": "loot",
+        "time": 1774359334516
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 47 点伤害！",
+        "type": "damage",
+        "time": 1774359334623
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 40 经验，16 金币",
+        "type": "loot",
+        "time": 1774359334624
+      },
+      {
+        "message": "🎁 获得 普通装备：布衣（防御+7.5）",
+        "type": "loot",
+        "time": 1774359334625
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 45 点伤害！",
+        "type": "damage",
+        "time": 1774359334732
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359334733
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 48 点伤害！",
+        "type": "damage",
+        "time": 1774359334841
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 40 经验，16 金币",
+        "type": "loot",
+        "time": 1774359334842
+      },
+      {
+        "message": "🎁 获得 普通装备：铜戒指（防御+5）",
+        "type": "loot",
+        "time": 1774359334843
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359334949
+      },
+      {
+        "message": "⚔️ 遭遇 3 只怪物！",
+        "type": "info",
+        "time": 1774359335452
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359335554
+      },
+      {
+        "message": "击杀 钉耙猫！获得 10 经验，5 金币",
+        "type": "loot",
+        "time": 1774359335554
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+3）",
+        "type": "loot",
+        "time": 1774359335555
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 44 点伤害！",
+        "type": "damage",
+        "time": 1774359335661
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359335662
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 47 点伤害！",
+        "type": "damage",
+        "time": 1774359335764
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359335765
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 44 点伤害！",
+        "type": "damage",
+        "time": 1774359335870
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359335871
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 44 点伤害！",
+        "type": "damage",
+        "time": 1774359335978
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 50 经验，20 金币",
+        "type": "loot",
+        "time": 1774359335980
+      },
+      {
+        "message": "🎁 获得 普通装备：布衣（防御+10.5）",
+        "type": "loot",
+        "time": 1774359335981
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 46 点伤害！",
+        "type": "damage",
+        "time": 1774359336087
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359336088
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 50 点伤害！",
+        "type": "damage",
+        "time": 1774359336192
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 50 经验，20 金币",
+        "type": "loot",
+        "time": 1774359336193
+      },
+      {
+        "message": "🎁 获得 普通装备：轻甲（防御+10.5）",
+        "type": "loot",
+        "time": 1774359336193
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359336303
+      },
+      {
+        "message": "⚔️ 遭遇 2 只怪物！",
+        "type": "info",
+        "time": 1774359336813
+      },
+      {
+        "message": "道士 攻击 多钩猫，造成 52 点伤害！",
+        "type": "damage",
+        "time": 1774359336916
+      },
+      {
+        "message": "击杀 多钩猫！获得 15 经验，8 金币",
+        "type": "loot",
+        "time": 1774359336918
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+4）",
+        "type": "loot",
+        "time": 1774359336921
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 53 点伤害！",
+        "type": "damage",
+        "time": 1774359337030
+      },
+      {
+        "message": "击杀 钉耙猫！获得 12 经验，6 金币",
+        "type": "loot",
+        "time": 1774359337031
+      },
+      {
+        "message": "🎁 获得 普通装备：木剑（攻击+11）",
+        "type": "loot",
+        "time": 1774359337032
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359337138
+      },
+      {
+        "message": "战斗结束",
+        "type": "info",
+        "time": 1774359337243
+      },
+      {
+        "message": "⚔️ 遭遇 3 只怪物！",
+        "type": "info",
+        "time": 1774359337642
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 50 点伤害！",
+        "type": "damage",
+        "time": 1774359337746
+      },
+      {
+        "message": "钉耙猫王 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359337747
+      },
+      {
+        "message": "道士 攻击 钉耙猫，造成 50 点伤害！",
+        "type": "damage",
+        "time": 1774359337849
+      },
+      {
+        "message": "击杀 钉耙猫！获得 12 经验，6 金币",
+        "type": "loot",
+        "time": 1774359337850
+      },
+      {
+        "message": "🎁 获得 普通装备：铜项链（防御+5）",
+        "type": "loot",
+        "time": 1774359337851
+      },
+      {
+        "message": "道士 攻击 钉耙猫王，造成 47 点伤害！",
+        "type": "damage",
+        "time": 1774359337961
+      },
+      {
+        "message": "击杀 钉耙猫王！获得 40 经验，16 金币",
+        "type": "loot",
+        "time": 1774359337962
+      },
+      {
+        "message": "🎁 获得 普通装备：轻甲（防御+7.5）",
+        "type": "loot",
+        "time": 1774359337963
+      },
+      {
+        "message": "道士 攻击 多钩猫，造成 46 点伤害！",
+        "type": "damage",
+        "time": 1774359338070
+      },
+      {
+        "message": "多钩猫 反击 道士，造成 1 点伤害！",
+        "type": "damage",
+        "time": 1774359338071
+      },
+      {
+        "message": "道士 攻击 多钩猫，造成 51 点伤害！",
+        "type": "damage",
+        "time": 1774359338178
+      },
+      {
+        "message": "击杀 多钩猫！获得 18 经验，9 金币",
+        "type": "loot",
+        "time": 1774359338179
+      },
+      {
+        "message": "🎁 获得 普通装备：铁剑（攻击+13）",
+        "type": "loot",
+        "time": 1774359338180
+      },
+      {
+        "message": "✨ 战斗胜利！✨",
+        "type": "info",
+        "time": 1774359338286
+      },
+      {
+        "message": "💾 正在准备导出存档...",
+        "type": "info",
+        "time": 1774359342203
+      }
+    ],
+    "isAutoBattle": false,
+    "battleSpeed": 100,
+    "speedLevel": 10,
+    "totalKills": 96,
+    "gameTime": 53,
+    "battleTimeout": 260,
+    "autoBattleTimeout": null,
+    "gameTimeInterval": 1,
+    "selectedBackpackSlots": {}
+  },
+  "exportTime": 1774359342203,
+  "exportTimestamp": "2026-03-24T13:35:42.203Z",
+  "gameVersion": "热血传奇 - 网页版",
+  "exportedBy": "热血传奇网页版"
+}

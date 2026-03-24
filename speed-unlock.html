@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>速度解锁系统 - 热血传奇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(255, 107, 107, 0.3);
+            border: 2px solid #ff6b6b;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ffd700;
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .gold-display {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+        }
+
+        .speed-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .speed-table th {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .speed-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .speed-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .speed-table tr.unlocked {
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .speed-table tr.current {
+            background: rgba(255, 215, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .level {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .speed-name {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .price {
+            color: #ffd700;
+        }
+
+        .description {
+            color: #888;
+            font-style: italic;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .status.unlocked {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        .status.locked {
+            background: #666;
+            color: #ccc;
+        }
+
+        .status.current {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+
+        .progress-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .progress-title {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #333;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4, #ffd700);
+            border-radius: 10px;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #888;
+        }
+
+        .tips {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid #ffd700;
+        }
+
+        .tips h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .tips ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .total-cost {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .total-cost .amount {
+            color: #ffd700;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ 速度解锁系统 ⚡</h1>
+            <div class="subtitle">热血传奇网页版 - 速度等级购买系统</div>
+        </header>
+
+        <div class="gold-display">
+            💰 当前金币: <span id="player-gold">0</span>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">📊 加速服务状态</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 10%;">1/10</div>
+            </div>
+            <div class="progress-text" id="progress-text">已解锁 1 个速度等级，加速服务未激活</div>
+        </div>
+
+        <table class="speed-table">
+            <thead>
+                <tr>
+                    <th>等级</th>
+                    <th>速度</th>
+                    <th>价格</th>
+                    <th>描述</th>
+                    <th>延迟</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody id="speed-table-body">
+            </tbody>
+        </table>
+
+        <div class="total-cost">
+            <div>🎯 购买全部速度等级需要</div>
+            <div class="amount">💰 <span id="total-cost">4,600</span> 金币</div>
+            <div style="font-size: 0.9rem; color: #888; margin-top: 5px;">⏰ 每个速度购买后持续5分钟</div>
+        </div>
+
+        <div class="tips">
+            <h3>💡 使用说明</h3>
+            <ul>
+                <li>游戏初始默认解锁 1x 速度，无需购买</li>
+                <li>点击「🔓 购买」按钮购买下一等级加速服务</li>
+                <li>购买后加速服务持续5分钟，到期后自动恢复为1x速度</li>
+                <li>使用 ◀ ▶ 按钮在已解锁的速度等级间切换</li>
+                <li>更高的速度意味着更快的战斗节奏，但需要更多金币</li>
+                <li>击杀怪物和出售装备可获得金币</li>
+                <li>速度等级解锁后永久可用，每次使用需重新购买时间</li>
+                <li>存档会自动保存已解锁的速度等级和剩余时间</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="back-link">🔙 返回游戏</a>
+        </div>
+    </div>
+
+    <script>
+        const speedSettings = {
+            1: { name: '1x', price: 0, delay: 1000, description: '正常速度' },
+            2: { name: '2x', price: 50, delay: 900, description: '略快' },
+            3: { name: '3x', price: 100, delay: 800, description: '较快' },
+            4: { name: '4x', price: 200, delay: 700, description: '快速' },
+            5: { name: '5x', price: 350, delay: 600, description: '很快' },
+            6: { name: '6x', price: 500, delay: 500, description: '极速' },
+            7: { name: '7x', price: 700, delay: 400, description: '超极速' },
+            8: { name: '8x', price: 900, delay: 300, description: '疯狂' },
+            9: { name: '9x', price: 1200, delay: 200, description: '狂暴' },
+            10: { name: '10x', price: 1500, delay: 100, description: '神速' }
+        };
+
+        function formatNumber(num) {
+            if (num >= 100000000) {
+                return (num / 100000000).toFixed(1) + '亿';
+            } else if (num >= 10000) {
+                return (num / 10000).toFixed(1) + '万';
+            }
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatTimeLeft(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            const savedData = localStorage.getItem('legendGameSave');
+            let gold = 0;
+            let unlockedLevels = [1];
+            let currentLevel = 1;
+            let speedTimeLeft = 0;
+
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    if (data.gameState) {
+                        gold = data.gameState.gold || 0;
+                        unlockedLevels = data.gameState.unlockedSpeedLevels || [1];
+                        currentLevel = data.gameState.speedLevel || 1;
+                        speedTimeLeft = data.gameState.speedTimeLeft || 0;
+                    }
+                } catch (e) {
+                    console.error('Error reading save:', e);
+                }
+            }
+
+            document.getElementById('player-gold').textContent = formatNumber(gold);
+
+            const tbody = document.getElementById('speed-table-body');
+            tbody.innerHTML = '';
+
+            unlockedLevels.sort((a, b) => a - b);
+
+            for (let level = 1; level <= 10; level++) {
+                const settings = speedSettings[level];
+                const isUnlocked = unlockedLevels.includes(level);
+                const isCurrent = currentLevel === level && speedTimeLeft > 0;
+
+                const row = document.createElement('tr');
+                row.className = (isCurrent ? 'current' : (isUnlocked ? 'unlocked' : ''));
+
+                let statusClass = 'locked';
+                let statusText = '🔒 未激活';
+
+                if (isCurrent) {
+                    statusClass = 'current';
+                    statusText = `⭐ 使用中 (${formatTimeLeft(speedTimeLeft)})`;
+                } else if (isUnlocked) {
+                    statusClass = 'unlocked';
+                    statusText = '✅ 可用（未激活）';
+                }
+
+                row.innerHTML = `
+                    <td class="level">Lv.${level}</td>
+                    <td class="speed-name">${settings.name}</td>
+                    <td class="price">${settings.price > 0 ? '💰 ' + formatNumber(settings.price) : '免费'}</td>
+                    <td class="description">${settings.description}</td>
+                    <td>${settings.delay}ms</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                `;
+
+                tbody.appendChild(row);
+            }
+
+            const progressPercent = (unlockedLevels.length / 10) * 100;
+            document.getElementById('progress-fill').style.width = progressPercent + '%';
+            document.getElementById('progress-fill').textContent = unlockedLevels.length + '/10';
+
+            const remainingLevels = 10 - unlockedLevels.length;
+            document.getElementById('progress-text').textContent =
+                speedTimeLeft > 0 
+                    ? `⏰ 加速服务进行中，剩余 ${formatTimeLeft(speedTimeLeft)} | 已解锁 ${unlockedLevels.length} 个等级`
+                    : `已解锁 ${unlockedLevels.length} 个等级 | 加速服务未激活`;
+
+            let totalCost = 0;
+            for (let i = 2; i <= 10; i++) {
+                totalCost += speedSettings[i].price;
+            }
+            document.getElementById('total-cost').textContent = formatNumber(totalCost);
+        }
+
+        setInterval(updateDisplay, 1000);
+        updateDisplay();
+    </script>
+</body>
+</html>
