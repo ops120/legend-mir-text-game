@@ -100,7 +100,7 @@ function initGame() {
         }, 1000);
     }
     
-    addToLog('欢迎来到热血传奇世界！', 'info');
+    addToLog('欢迎来到热血传奇文字游戏世界！', 'info');
     addToLog('选择一个角色开始你的传奇之旅！', 'info');
 }
 

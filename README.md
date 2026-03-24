@@ -1,6 +1,6 @@
-# 🔥 热血传奇 - 网页版
+# 🔥 热血传奇文字游戏
 
-> 经典复刻！纯前端实现的网页版热血传奇文字游戏
+> 经典复刻！纯前端实现的网页版文字冒险游戏
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![HTML5](https://img.shields.io/badge/HTML5-Game-orange.svg)](https://developer.mozilla.org/zh-CN/docs/Web/Guide/HTML/HTML5)
@@ -9,7 +9,7 @@
 
 ## 🎮 项目简介
 
-热血传奇网页版是一款纯前端实现的文字冒险游戏，完美复刻经典传奇游戏的核心玩法。无需安装任何插件，直接在浏览器中体验！
+传奇文字游戏版是一款纯前端实现的文字冒险游戏，完美复刻经典传奇游戏的核心玩法。无需安装任何插件，直接在浏览器中体验！
 
 ### ✨ 核心特色
 
@@ -57,10 +57,12 @@
 ## 📂 项目结构
 
 ```
-web传奇/
+legend-mir-text-game/
 │
 ├── index.html              # 🎮 主游戏入口
 ├── speed-unlock.html      # ⚡ 速度解锁系统
+├── README.md              # 📖 项目说明
+├── .gitignore            # 🔧 Git忽略配置
 │
 ├── css/                   # 🎨 样式目录
 │   └── style.css         # 游戏样式
@@ -70,41 +72,51 @@ web传奇/
 │   ├── game.js          # 🎯 游戏逻辑
 │   └── save.js          # 💾 存档管理
 │
-├── docs/                  # 📚 文档目录
-│   ├── requirements.md
-│   ├── 存档安全防篡改方案.md
-│   ├── 存档迁移指南.md
-│   └── 游戏加速原理.md
+├── saves/                 # 💾 存档目录（可选）
+│   └── *.json           # 导出存档
 │
-├── saves/                 # 💾 存档目录
-└── assets/               # 🖼️ 资源目录
+└── assets/               # 🖼️ 资源目录（预留）
     ├── images/
     ├── icons/
     └── audio/
 ```
 
+### 📝 目录说明
+
+| 目录/文件 | 说明 |
+|-----------|------|
+| `index.html` | 游戏主页面 |
+| `speed-unlock.html` | 速度解锁系统页面 |
+| `css/` | 游戏样式文件 |
+| `js/` | 游戏逻辑脚本 |
+| `saves/` | 存档导出目录 |
+| `assets/` | 预留资源目录 |
+
 ## 🚀 快速开始
 
-### 在线体验
-1. 直接在浏览器中打开 `index.html`
-2. 选择角色开始冒险
+### 🎮 本地运行
+**无需安装任何依赖！只需下载并打开 `index.html` 即可开始游戏！**
 
-### 本地运行
+1. 下载项目所有文件
+2. 双击打开 `index.html`
+3. 选择角色开始冒险
+
+### 🛠️ 开发者模式
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/web-legend.git
+git clone https://github.com/ops120/legend-mir-text-game.git
 
 # 进入目录
-cd web-legend
+cd legend-mir-text-game
 
-# 使用任意HTTP服务器启动
+# 使用HTTP服务器（可选）
 # Python 3
 python -m http.server 8000
 
 # Node.js
 npx serve
 
-# 然后访问 http://localhost:8000
+# 访问 http://localhost:8000
 ```
 
 ## 🎮 操作指南
@@ -212,8 +224,8 @@ A: 出售不需要的装备，或双击物品快速出售。
 
 ## 📧 联系作者
 
-- GitHub: [Your GitHub Profile](https://github.com/yourusername)
-- Email: your.email@example.com
+- 🅱️ 哔哩哔哩: [你们喜爱的老王](https://space.bilibili.com/97727630)
+- GitHub: [legend-mir-text-game](https://github.com/ops120/legend-mir-text-game)
 
 ---
 

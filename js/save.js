@@ -175,7 +175,7 @@ function exportSave() {
             exportTime: Date.now(),
             exportTimestamp: new Date().toISOString(),
             gameVersion: document.title,
-            exportedBy: '热血传奇网页版'
+            exportedBy: '传奇文字游戏版'
         };
         
         const dataStr = JSON.stringify(saveData, null, 2);
@@ -194,7 +194,7 @@ function exportSave() {
         const charName = gameState.selectedCharacter ? gameState.selectedCharacter.name : 'unknown';
         
         link.href = url;
-        link.download = `热血传奇_${charName}_Lv${charLevel}_${timestamp}.json`;
+        link.download = `传奇文字游戏_${charName}_Lv${charLevel}_${timestamp}.json`;
         link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
