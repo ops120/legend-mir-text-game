@@ -280,14 +280,14 @@
         <div class="tips">
             <h3>💡 使用说明</h3>
             <ul>
-                <li>游戏初始默认解锁 1x 速度，无需购买</li>
-                <li>点击「🔓 购买」按钮购买下一等级加速服务</li>
+                <li>游戏初始默认 1x 速度，无需购买</li>
+                <li>点击「💰 购买加速」按钮选择任意速度等级</li>
+                <li>只要金币足够，可以直接购买任意等级（2-10x）</li>
                 <li>购买后加速服务持续5分钟，到期后自动恢复为1x速度</li>
-                <li>使用 ◀ ▶ 按钮在已解锁的速度等级间切换</li>
                 <li>更高的速度意味着更快的战斗节奏，但需要更多金币</li>
                 <li>击杀怪物和出售装备可获得金币</li>
-                <li>速度等级解锁后永久可用，每次使用需重新购买时间</li>
-                <li>存档会自动保存已解锁的速度等级和剩余时间</li>
+                <li>每次使用需重新购买时间</li>
+                <li>存档会自动保存当前速度和剩余时间</li>
             </ul>
         </div>
 
@@ -328,7 +328,6 @@
         function updateDisplay() {
             const savedData = localStorage.getItem('legendGameSave');
             let gold = 0;
-            let unlockedLevels = [1];
             let currentLevel = 1;
             let speedTimeLeft = 0;
 
@@ -337,7 +336,6 @@
                     const data = JSON.parse(savedData);
                     if (data.gameState) {
                         gold = data.gameState.gold || 0;
-                        unlockedLevels = data.gameState.unlockedSpeedLevels || [1];
                         currentLevel = data.gameState.speedLevel || 1;
                         speedTimeLeft = data.gameState.speedTimeLeft || 0;
                     }
@@ -351,25 +349,20 @@
             const tbody = document.getElementById('speed-table-body');
             tbody.innerHTML = '';
 
-            unlockedLevels.sort((a, b) => a - b);
-
             for (let level = 1; level <= 10; level++) {
                 const settings = speedSettings[level];
-                const isUnlocked = unlockedLevels.includes(level);
+                const canAfford = gold >= settings.price;
                 const isCurrent = currentLevel === level && speedTimeLeft > 0;
 
                 const row = document.createElement('tr');
-                row.className = (isCurrent ? 'current' : (isUnlocked ? 'unlocked' : ''));
+                row.className = isCurrent ? 'current' : '';
 
                 let statusClass = 'locked';
-                let statusText = '🔒 未激活';
+                let statusText = canAfford ? '💰 可购买' : '❌ 金币不足';
 
                 if (isCurrent) {
                     statusClass = 'current';
                     statusText = `⭐ 使用中 (${formatTimeLeft(speedTimeLeft)})`;
-                } else if (isUnlocked) {
-                    statusClass = 'unlocked';
-                    statusText = '✅ 可用（未激活）';
                 }
 
                 row.innerHTML = `
@@ -384,21 +377,17 @@
                 tbody.appendChild(row);
             }
 
-            const progressPercent = (unlockedLevels.length / 10) * 100;
+            const progressPercent = (currentLevel / 10) * 100;
             document.getElementById('progress-fill').style.width = progressPercent + '%';
-            document.getElementById('progress-fill').textContent = unlockedLevels.length + '/10';
+            document.getElementById('progress-fill').textContent = currentLevel + 'x';
 
-            const remainingLevels = 10 - unlockedLevels.length;
+            const description = speedSettings[currentLevel].description;
             document.getElementById('progress-text').textContent =
                 speedTimeLeft > 0 
-                    ? `⏰ 加速服务进行中，剩余 ${formatTimeLeft(speedTimeLeft)} | 已解锁 ${unlockedLevels.length} 个等级`
-                    : `已解锁 ${unlockedLevels.length} 个等级 | 加速服务未激活`;
+                    ? `⏰ 加速服务进行中 (${description})，剩余 ${formatTimeLeft(speedTimeLeft)}`
+                    : `💰 当前速度: ${currentLevel}x (${description}) | 金币: ${formatNumber(gold)}`;
 
-            let totalCost = 0;
-            for (let i = 2; i <= 10; i++) {
-                totalCost += speedSettings[i].price;
-            }
-            document.getElementById('total-cost').textContent = formatNumber(totalCost);
+            document.getElementById('total-cost').textContent = formatNumber(speedSettings[10].price);
         }
 
         setInterval(updateDisplay, 1000);

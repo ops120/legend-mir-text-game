@@ -47,10 +47,33 @@ function loadGame() {
             }
             
             gameState = migrateGameState(data.gameState, data.version);
-            gameState.characters.forEach(char => updateCharacterStats(char));
+            
+            gameState.battleActive = false;
+            gameState.currentMonsters = [];
+            gameState.isAutoBattle = false;
+            gameState.battleTimeout = null;
+            gameState.autoBattleTimeout = null;
+            gameState.battleLog = [];
+            gameState.skillCooldowns = {};
+            
+            if (typeof gameState.battleSpeed !== 'number' || gameState.battleSpeed <= 0) {
+                gameState.battleSpeed = 1000;
+            }
+            
+            if (typeof gameState.selectedBackpackSlots === 'undefined') {
+                gameState.selectedBackpackSlots = new Set();
+            }
+            
+            gameState.characters.forEach(char => {
+                updateCharacterStats(char);
+                if (!char.buffs) char.buffs = [];
+                if (!char.dots) char.dots = [];
+            });
+            
             renderCharacters();
             renderMaps();
             renderBackpack();
+            renderSkills();
             updateUI();
             updateSpeedUI();
             addToLog('📂 存档已从浏览器加载！', 'info');
@@ -259,6 +282,18 @@ function importSave(file) {
                 
                 gameState = migratedState;
                 
+                gameState.battleActive = false;
+                gameState.currentMonsters = [];
+                gameState.isAutoBattle = false;
+                gameState.battleTimeout = null;
+                gameState.autoBattleTimeout = null;
+                gameState.battleLog = [];
+                gameState.skillCooldowns = {};
+                
+                if (typeof gameState.battleSpeed !== 'number' || gameState.battleSpeed <= 0) {
+                    gameState.battleSpeed = 1000;
+                }
+                
                 if (!gameState.selectedBackpackSlots) {
                     gameState.selectedBackpackSlots = new Set();
                 }
@@ -271,12 +306,15 @@ function importSave(file) {
                             }
                         });
                     }
+                    if (!char.buffs) char.buffs = [];
+                    if (!char.dots) char.dots = [];
                     updateCharacterStats(char);
                 });
                 
                 renderCharacters();
                 renderMaps();
                 renderBackpack();
+                renderSkills();
                 updateUI();
                 updateSpeedUI();
                 

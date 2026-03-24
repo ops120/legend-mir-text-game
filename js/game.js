@@ -18,7 +18,10 @@ let gameState = {
     battleTimeout: null,
     autoBattleTimeout: null,
     gameTimeInterval: null,
-    selectedBackpackSlots: new Set()
+    selectedBackpackSlots: new Set(),
+    activeBuffs: [],
+    activeDOTs: [],
+    skillCooldowns: {}
 };
 
 const speedSettings = {
@@ -78,6 +81,11 @@ function initGame() {
     gameState.isAutoBattle = false;
     gameState.battleLog = [];
     gameState.currentMonsters = [];
+    gameState.battleSpeed = 1000;
+    gameState.speedLevel = 1;
+    gameState.unlockedSpeedLevels = [1];
+    gameState.speedTimeLeft = 0;
+    gameState.skillCooldowns = {};
     
     Object.keys(gameData.classes).forEach(classId => {
         const char = createCharacter(classId);
@@ -90,6 +98,7 @@ function initGame() {
     renderCharacters();
     renderMaps();
     renderBackpack();
+    renderSkills();
     updateUI();
     updateSpeedUI();
     
@@ -188,6 +197,7 @@ function selectCharacter(char) {
     
     gameState.selectedCharacter = char;
     renderCharacters();
+    renderSkills();
     addToLog(`选择了 ${char.name}`, 'info');
 }
 
@@ -272,6 +282,66 @@ function renderBackpack() {
     
     document.getElementById('backpack-count').textContent = gameState.backpack.filter(item => item).length;
     updateSellPreview();
+}
+
+function renderSkills() {
+    const container = document.getElementById('skills-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const char = gameState.selectedCharacter;
+    if (!char) {
+        container.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">请先选择一个角色</div>';
+        return;
+    }
+    
+    const skills = getCharacterSkills(char);
+    
+    if (skills.length === 0) {
+        container.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">暂无可用技能</div>';
+        return;
+    }
+    
+    skills.forEach(skill => {
+        const skillEl = document.createElement('div');
+        skillEl.className = 'skill-item';
+        
+        if (skill.remainingCooldown > 0) {
+            skillEl.classList.add('on-cooldown');
+        } else if (char.mp < skill.mpCost) {
+            skillEl.classList.add('mp-insufficient');
+        }
+        
+        const typeBadges = [];
+        if (skill.type === 'active' || skill.type === 'passive') {
+            typeBadges.push('<span class="skill-badge attack">攻击</span>');
+        }
+        if (skill.type === 'heal') {
+            typeBadges.push('<span class="skill-badge heal">治疗</span>');
+        }
+        if (skill.type === 'buff') {
+            typeBadges.push('<span class="skill-badge buff">buff</span>');
+        }
+        if (skill.aoe) {
+            typeBadges.push('<span class="skill-badge aoe">AOE</span>');
+        }
+        if (skill.dot) {
+            typeBadges.push('<span class="skill-badge dot">DOT</span>');
+        }
+        
+        skillEl.innerHTML = `
+            <div class="skill-name">${skill.name}</div>
+            <div class="skill-level">需要等级: ${skill.skillId}</div>
+            <div class="skill-info">
+                ${skill.mpCost > 0 ? `<div class="skill-mp">MP: ${skill.mpCost}</div>` : ''}
+                ${skill.remainingCooldown > 0 ? `<div class="skill-cooldown">冷却: ${skill.remainingCooldown}回合</div>` : ''}
+            </div>
+            <div>${typeBadges.join(' ')}</div>
+        `;
+        
+        container.appendChild(skillEl);
+    });
 }
 
 function showItemTooltip(item, event, isBackpack = false) {
@@ -555,37 +625,68 @@ function battleRound() {
         return;
     }
     
+    updateBuffs(char);
+    
     const aliveMonsters = gameState.currentMonsters.filter(m => !m.isDead);
     if (aliveMonsters.length === 0) {
         battleVictory();
         return;
     }
     
-    const target = aliveMonsters[Math.floor(Math.random() * aliveMonsters.length)];
+    const availableSkill = selectSkill(char, aliveMonsters.length);
     
-    let damage = calculateDamage(char, target);
-    target.hp -= damage;
-    
-    addToLog(`${char.name} 攻击 ${target.name}，造成 ${damage} 点伤害！`, 'damage');
-    
-    if (target.hp <= 0) {
-        target.hp = 0;
-        target.isDead = true;
-        gameState.totalKills++;
-        addToLog(`击杀 ${target.name}！获得 ${target.exp} 经验，${target.gold} 金币`, 'loot');
+    if (availableSkill) {
+        useSkill(char, availableSkill, aliveMonsters);
+    } else {
+        const target = aliveMonsters[Math.floor(Math.random() * aliveMonsters.length)];
+        let damage = calculateDamage(char, target);
+        target.hp -= damage;
+        addToLog(`${char.name} 攻击 ${target.name}，造成 ${damage} 点伤害！`, 'damage');
         
-        char.exp += target.exp;
-        gameState.gold += target.gold;
-        
-        generateLoot(target);
-        
-        checkLevelUp(char);
+        if (target.hp <= 0) {
+            target.hp = 0;
+            target.isDead = true;
+            gameState.totalKills++;
+            addToLog(`击杀 ${target.name}！获得 ${target.exp} 经验，${target.gold} 金币`, 'loot');
+            
+            char.exp += target.exp;
+            gameState.gold += target.gold;
+            
+            generateLoot(target);
+            checkLevelUp(char);
+        }
     }
     
-    if (!target.isDead) {
-        const monsterDamage = calculateMonsterDamage(target, char);
-        char.hp -= monsterDamage;
-        addToLog(`${target.name} 反击 ${char.name}，造成 ${monsterDamage} 点伤害！`, 'damage');
+    const stillAliveMonsters = gameState.currentMonsters.filter(m => !m.isDead);
+    if (stillAliveMonsters.length === 0) {
+        battleVictory();
+        return;
+    }
+    
+    for (const monster of stillAliveMonsters) {
+        if (monster.isDead) continue;
+        
+        const monsterDamage = calculateMonsterDamage(monster, char);
+        let finalDamage = monsterDamage;
+        
+        if (char.buffs) {
+            char.buffs.forEach(buff => {
+                if (buff.effect === 'damageReduction') {
+                    finalDamage = Math.floor(finalDamage * (1 - buff.value));
+                }
+                if (buff.effect === 'shield') {
+                    const absorbed = Math.floor(monsterDamage * buff.value);
+                    finalDamage -= absorbed;
+                    if (absorbed > 0) {
+                        addToLog(`🛡️ 魔法盾吸收了 ${absorbed} 点伤害`, 'info');
+                    }
+                }
+            });
+        }
+        
+        finalDamage = Math.max(0, finalDamage);
+        char.hp -= finalDamage;
+        addToLog(`${monster.name} 攻击 ${char.name}，造成 ${finalDamage} 点伤害！`, 'damage');
         
         if (char.hp <= 0) {
             char.hp = 0;
@@ -602,9 +703,257 @@ function battleRound() {
     
     renderMonsters();
     renderCharacters();
+    renderSkills();
     updateUI();
     
     gameState.battleTimeout = setTimeout(() => battleRound(), gameState.battleSpeed);
+}
+
+function getCharacterSkills(char) {
+    if (!char || !char.class) return [];
+    const classInfo = gameData.classes[char.class];
+    if (!classInfo) return [];
+    
+    const skills = [];
+    const skillIds = Object.keys(classInfo.skills).map(Number).sort((a, b) => a - b);
+    
+    for (const skillId of skillIds) {
+        if (char.level >= skillId) {
+            const skillInfo = classInfo.skills[skillId];
+            const cooldownKey = `${char.id}_${skillId}`;
+            const remainingCooldown = gameState.skillCooldowns[cooldownKey] || 0;
+            
+            skills.push({
+                skillId: skillId,
+                name: skillInfo.name,
+                type: skillInfo.type,
+                mpCost: skillInfo.mpCost || 0,
+                damageMultiplier: skillInfo.damageMultiplier || 1,
+                healMultiplier: skillInfo.healMultiplier || 0,
+                aoe: skillInfo.aoe || false,
+                dot: skillInfo.dot || false,
+                duration: skillInfo.duration || 0,
+                effect: skillInfo.effect || null,
+                value: skillInfo.value || 0,
+                cooldown: skillInfo.cooldown || 0,
+                remainingCooldown: remainingCooldown,
+                canUse: char.mp >= (skillInfo.mpCost || 0) && remainingCooldown <= 0
+            });
+        }
+    }
+    
+    return skills;
+}
+
+function selectSkill(char, monsterCount) {
+    const skills = getCharacterSkills(char);
+    if (skills.length === 0) return null;
+    
+    const usableSkills = skills.filter(s => s.canUse);
+    if (usableSkills.length === 0) return null;
+    
+    const hpPercent = char.hp / char.maxHp;
+    const mpPercent = char.mp / char.maxMp;
+    
+    for (const skill of usableSkills) {
+        if (hpPercent < 0.3 && (skill.type === 'heal' || skill.name === '护体神盾' || skill.name === '魔法盾')) {
+            return skill;
+        }
+    }
+    
+    if (monsterCount >= 2) {
+        for (const skill of usableSkills) {
+            if (skill.aoe) {
+                return skill;
+            }
+        }
+    }
+    
+    if (mpPercent > 0.5) {
+        const offensiveSkills = usableSkills.filter(s => s.type !== 'heal' && s.damageMultiplier > 1);
+        if (offensiveSkills.length > 0) {
+            return offensiveSkills[Math.floor(Math.random() * offensiveSkills.length)];
+        }
+    }
+    
+    if (usableSkills.length > 1) {
+        const basicAttack = usableSkills.find(s => s.type === 'passive');
+        if (basicAttack && Math.random() < 0.7) {
+            return basicAttack;
+        }
+    }
+    
+    return usableSkills[0];
+}
+
+function useSkill(char, skill, monsters) {
+    const skillInfo = gameData.classes[char.class].skills[skill.skillId];
+    
+    char.mp -= skill.mpCost;
+    
+    const cooldownKey = `${char.id}_${skill.skillId}`;
+    gameState.skillCooldowns[cooldownKey] = skill.cooldown;
+    
+    addToLog(`✨ ${char.name} 使用【${skill.name}】！`, 'info');
+    
+    switch (skill.type) {
+        case 'active':
+        case 'passive':
+            if (skill.aoe) {
+                const aliveMonsters = monsters.filter(m => !m.isDead);
+                for (const monster of aliveMonsters) {
+                    let damage = calculateSkillDamage(char, monster, skill);
+                    monster.hp -= damage;
+                    addToLog(`💥 【${skill.name}】对 ${monster.name} 造成 ${damage} 点伤害！`, 'damage');
+                    
+                    if (monster.hp <= 0) {
+                        monster.hp = 0;
+                        monster.isDead = true;
+                        gameState.totalKills++;
+                        char.exp += monster.exp;
+                        gameState.gold += monster.gold;
+                        addToLog(`击杀 ${monster.name}！获得 ${monster.exp} 经验`, 'loot');
+                        generateLoot(monster);
+                        checkLevelUp(char);
+                    }
+                }
+            } else {
+                const target = monsters.filter(m => !m.isDead)[0];
+                if (target) {
+                    let damage = calculateSkillDamage(char, target, skill);
+                    target.hp -= damage;
+                    addToLog(`💥 【${skill.name}】对 ${target.name} 造成 ${damage} 点伤害！`, 'damage');
+                    
+                    if (target.hp <= 0) {
+                        target.hp = 0;
+                        target.isDead = true;
+                        gameState.totalKills++;
+                        char.exp += target.exp;
+                        gameState.gold += target.gold;
+                        addToLog(`击杀 ${target.name}！获得 ${target.exp} 经验`, 'loot');
+                        generateLoot(target);
+                        checkLevelUp(char);
+                    }
+                    
+                    if (skill.dot) {
+                        applyDOT(target, skill);
+                    }
+                }
+            }
+            break;
+            
+        case 'heal':
+            let healAmount = Math.floor(char.maxHp * skill.healMultiplier);
+            char.hp = Math.min(char.maxHp, char.hp + healAmount);
+            addToLog(`💚 【${skill.name}】恢复了 ${healAmount} 点生命！`, 'heal');
+            break;
+            
+        case 'buff':
+            if (!char.buffs) char.buffs = [];
+            char.buffs.push({
+                name: skill.name,
+                effect: skill.effect,
+                value: skill.value,
+                duration: skill.duration,
+                remainingDuration: skill.duration
+            });
+            addToLog(`🛡️ 【${skill.name}】效果发动：${skill.duration}回合内${getEffectDescription(skill)}`, 'info');
+            break;
+            
+        case 'debuff':
+            if (skill.dot && monsters.length > 0) {
+                const target = monsters.filter(m => !m.isDead)[0];
+                if (target) {
+                    applyDOT(target, skill);
+                }
+            }
+            break;
+    }
+}
+
+function getEffectDescription(skill) {
+    switch (skill.effect) {
+        case 'damageReduction':
+            return `减少${skill.value * 100}%伤害`;
+        case 'shield':
+            return `吸收${skill.value * 100}%伤害`;
+        case 'invisible':
+            return '隐身';
+        default:
+            return skill.description || '';
+    }
+}
+
+function applyDOT(target, skill) {
+    if (!target.dots) target.dots = [];
+    
+    target.dots.push({
+        name: skill.name,
+        damage: Math.floor(target.maxHp * skill.damageMultiplier * 0.1),
+        duration: skill.duration,
+        remainingDuration: skill.duration
+    });
+    
+    addToLog(`☠️ ${target.name} 中了【${skill.name}】！`, 'damage');
+}
+
+function calculateSkillDamage(char, monster, skill) {
+    const baseDamage = char.attack * skill.damageMultiplier;
+    const defense = monster.defense * (monster.dots && monster.dots.length > 0 ? 0.7 : 1);
+    const finalDamage = Math.max(1, Math.floor((baseDamage - defense / 2) * (0.9 + Math.random() * 0.2)));
+    return finalDamage;
+}
+
+function updateBuffs(char) {
+    if (!char.buffs) return;
+    
+    char.buffs = char.buffs.filter(buff => {
+        buff.remainingDuration--;
+        if (buff.remainingDuration <= 0) {
+            addToLog(`⏰ 【${buff.name}】效果结束`, 'info');
+            return false;
+        }
+        return true;
+    });
+    
+    if (!char.dots) char.dots = [];
+    
+    const deadMonsters = [];
+    char.dots.forEach((dot, index) => {
+        const monster = gameState.currentMonsters.find(m => m.dots && m.dots.includes(dot));
+        if (monster) {
+            monster.hp -= dot.damage;
+            addToLog(`☠️ 【${dot.name}】对 ${monster.name} 造成 ${dot.damage} 点持续伤害！`, 'damage');
+            
+            if (monster.hp <= 0) {
+                monster.hp = 0;
+                monster.isDead = true;
+                gameState.totalKills++;
+                char.exp += monster.exp;
+                gameState.gold += monster.gold;
+                addToLog(`击杀 ${monster.name}！获得 ${monster.exp} 经验`, 'loot');
+                generateLoot(monster);
+                checkLevelUp(char);
+            }
+        }
+        
+        dot.remainingDuration--;
+        if (dot.remainingDuration <= 0) {
+            if (monster) {
+                monster.dots = monster.dots.filter(d => d !== dot);
+            }
+            return false;
+        }
+        return true;
+    });
+    
+    char.dots = char.dots.filter(d => d.remainingDuration > 0);
+    
+    Object.keys(gameState.skillCooldowns).forEach(key => {
+        if (gameState.skillCooldowns[key] > 0) {
+            gameState.skillCooldowns[key]--;
+        }
+    });
 }
 
 function calculateDamage(char, monster) {
@@ -719,6 +1068,7 @@ function generateLoot(monster) {
 }
 
 function checkLevelUp(char) {
+    let leveledUp = false;
     while (char.exp >= char.maxExp && char.level < 100) {
         char.exp -= char.maxExp;
         char.level++;
@@ -727,9 +1077,18 @@ function checkLevelUp(char) {
         updateCharacterStats(char);
         
         addToLog(`🎉 ${char.name} 升级了！现在是 ${char.level} 级！`, 'levelup');
+        leveledUp = true;
+    }
+    
+    if (leveledUp) {
+        const skills = getCharacterSkills(char);
+        const newSkills = skills.filter(s => s.skillId === char.level);
         
-        if (char.level % 10 === 0) {
-            addToLog(`${char.name} 获得了新技能！`, 'info');
+        if (newSkills.length > 0) {
+            newSkills.forEach(skill => {
+                addToLog(`🌟 ${char.name} 学会了新技能【${skill.name}】！`, 'levelup');
+            });
+            renderSkills();
         }
     }
 }
@@ -773,38 +1132,47 @@ function toggleAutoBattle() {
 }
 
 function changeSpeed(delta) {
-    if (gameState.speedLevel === 1 && gameState.speedTimeLeft <= 0 && delta > 0) {
-        addToLog('⚠️ 请先购买加速服务', 'info');
-        return;
-    }
-    
     if (gameState.speedLevel === 1 && gameState.speedTimeLeft <= 0) {
         addToLog('⚠️ 请先购买加速服务', 'info');
         return;
     }
     
-    const currentIndex = gameState.unlockedSpeedLevels.indexOf(gameState.speedLevel);
-    
     if (delta > 0) {
-        const nextIndex = currentIndex + 1;
-        if (nextIndex < gameState.unlockedSpeedLevels.length) {
-            gameState.speedLevel = gameState.unlockedSpeedLevels[nextIndex];
-            gameState.battleSpeed = speedSettings[gameState.speedLevel].delay;
-            updateSpeedUI();
-            addToLog(`⚡ 切换到 ${speedSettings[gameState.speedLevel].name} 速度（${speedSettings[gameState.speedLevel].description}）`, 'info');
-        } else {
-            addToLog('⚠️ 已达到已解锁的最高速度', 'info');
+        if (gameState.speedLevel >= 10) {
+            addToLog('⚠️ 已达到最高速度等级', 'info');
+            return;
         }
+        
+        const currentPrice = speedSettings[gameState.speedLevel].price;
+        const nextPrice = speedSettings[gameState.speedLevel + 1].price;
+        const priceDiff = nextPrice - currentPrice;
+        
+        if (gameState.gold < priceDiff) {
+            addToLog(`💰 金币不足！升级到 ${gameState.speedLevel + 1}x 需要 ${formatNumber(priceDiff)} 金币，你只有 ${formatNumber(gameState.gold)} 金币`, 'info');
+            return;
+        }
+        
+        gameState.gold -= priceDiff;
+        gameState.speedLevel += 1;
+        gameState.battleSpeed = speedSettings[gameState.speedLevel].delay;
+        gameState.speedTimeLeft = 300;
+        
+        startSpeedTimer();
+        updateUI();
+        updateSpeedUI();
+        
+        addToLog(`⚡ 升级到 ${speedSettings[gameState.speedLevel].name} 速度（${speedSettings[gameState.speedLevel].description}）`, 'info');
+        addToLog(`💰 消耗 ${formatNumber(priceDiff)} 金币，计时器已重置为5分钟`, 'info');
     } else {
-        const prevIndex = currentIndex - 1;
-        if (prevIndex >= 0) {
-            gameState.speedLevel = gameState.unlockedSpeedLevels[prevIndex];
-            gameState.battleSpeed = speedSettings[gameState.speedLevel].delay;
-            updateSpeedUI();
-            addToLog(`⚡ 切换到 ${speedSettings[gameState.speedLevel].name} 速度（${speedSettings[gameState.speedLevel].description}）`, 'info');
-        } else {
+        if (gameState.speedLevel <= 1) {
             addToLog('⚠️ 已达到最低速度', 'info');
+            return;
         }
+        
+        gameState.speedLevel -= 1;
+        gameState.battleSpeed = speedSettings[gameState.speedLevel].delay;
+        updateSpeedUI();
+        addToLog(`⚡ 切换到 ${speedSettings[gameState.speedLevel].name} 速度（${speedSettings[gameState.speedLevel].description}）`, 'info');
     }
 }
 
@@ -816,42 +1184,51 @@ function purchaseSpeed() {
         return;
     }
     
-    const currentMax = Math.max(...gameState.unlockedSpeedLevels);
+    let optionsText = '请选择要购买的速度等级：\n\n';
+    let affordableLevels = [];
     
-    if (currentMax >= 10) {
-        addToLog('⚠️ 已解锁最高速度等级！', 'info');
+    for (let level = 2; level <= 10; level++) {
+        const price = speedSettings[level].price;
+        const canAfford = gameState.gold >= price;
+        const status = canAfford ? '✅' : '❌';
+        optionsText += `${status} ${level}x - ${formatNumber(price)} 金币 (${speedSettings[level].description})\n`;
+        if (canAfford) {
+            affordableLevels.push(level);
+        }
+    }
+    optionsText += '\n输入数字 2-10 选择速度等级';
+    
+    const choice = prompt(optionsText);
+    
+    if (!choice) return;
+    
+    const level = parseInt(choice.trim());
+    
+    if (isNaN(level) || level < 2 || level > 10) {
+        addToLog('⚠️ 请输入 2-10 之间的数字', 'info');
         return;
     }
     
-    const nextLevel = currentMax + 1;
-    const price = speedSettings[nextLevel].price;
+    const price = speedSettings[level].price;
     
     if (gameState.gold < price) {
-        addToLog(`💰 金币不足！购买 ${nextLevel}x 加速需要 ${formatNumber(price)} 金币，你只有 ${formatNumber(gameState.gold)} 金币`, 'info');
+        addToLog(`💰 金币不足！购买 ${level}x 加速需要 ${formatNumber(price)} 金币，你只有 ${formatNumber(gameState.gold)} 金币`, 'info');
         return;
     }
     
-    if (confirm(`🔓 购买 ${nextLevel}x 加速服务\n\n价格: ${formatNumber(price)} 金币\n效果: ${speedSettings[nextLevel].description}\n持续时间: 5分钟\n\n确认消耗 ${formatNumber(price)} 金币？`)) {
-        gameState.gold -= price;
-        
-        if (!gameState.unlockedSpeedLevels.includes(nextLevel)) {
-            gameState.unlockedSpeedLevels.push(nextLevel);
-            gameState.unlockedSpeedLevels.sort((a, b) => a - b);
-        }
-        
-        gameState.speedLevel = nextLevel;
-        gameState.battleSpeed = speedSettings[nextLevel].delay;
-        gameState.speedTimeLeft = 300;
-        
-        startSpeedTimer();
-        
-        updateUI();
-        updateSpeedUI();
-        
-        addToLog(`🎉 购买成功！${nextLevel}x 加速（${speedSettings[nextLevel].description}）已激活！`, 'levelup');
-        addToLog(`⏰ 持续时间: 5分钟`, 'info');
-        addToLog(`💰 剩余金币: ${formatNumber(gameState.gold)}`, 'gold');
-    }
+    gameState.gold -= price;
+    gameState.speedLevel = level;
+    gameState.battleSpeed = speedSettings[level].delay;
+    gameState.speedTimeLeft = 300;
+    
+    startSpeedTimer();
+    
+    updateUI();
+    updateSpeedUI();
+    
+    addToLog(`🎉 购买成功！${level}x 加速（${speedSettings[level].description}）已激活！`, 'levelup');
+    addToLog(`⏰ 持续时间: 5分钟`, 'info');
+    addToLog(`💰 剩余金币: ${formatNumber(gameState.gold)}`, 'gold');
 }
 
 function startSpeedTimer() {
@@ -907,19 +1284,13 @@ function updateSpeedUI() {
     }
     
     const unlockBtn = document.getElementById('unlock-speed');
-    const currentMax = Math.max(...gameState.unlockedSpeedLevels);
     
-    if (currentMax >= 10) {
-        unlockBtn.textContent = '✅ 已满级';
-        unlockBtn.disabled = false;
-    } else if (hasActiveSpeed) {
-        const nextLevel = currentMax + 1;
+    if (hasActiveSpeed) {
         unlockBtn.textContent = `⏰ ${formatTimeLeft(gameState.speedTimeLeft)}`;
         unlockBtn.disabled = true;
         unlockBtn.style.opacity = '0.5';
     } else {
-        const nextLevel = currentMax + 1;
-        unlockBtn.textContent = `🔓 购买 ${nextLevel}x (${formatNumber(speedSettings[nextLevel].price)}金币)`;
+        unlockBtn.textContent = '💰 购买加速';
         unlockBtn.disabled = false;
         unlockBtn.style.opacity = '1';
     }
@@ -948,12 +1319,15 @@ function respawnCharacter(char) {
     char.hp = Math.floor(char.maxHp * 0.5);
     char.mp = Math.floor(char.maxMp * 0.5);
     char.isDead = false;
+    char.buffs = [];
+    char.dots = [];
     
     const oldMapIndex = gameState.currentMapIndex;
     gameState.currentMapIndex = 0;
     
     renderCharacters();
     renderMaps();
+    renderSkills();
     updateUI();
     
     addToLog(`💚 ${char.name} 在【边界村】安全区复活！恢复了 ${char.hp} HP 和 ${char.mp} MP`, 'heal');

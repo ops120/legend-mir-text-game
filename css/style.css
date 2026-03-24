@@ -535,3 +535,102 @@ div[class*="quality-orange"] { color: #ffa500; text-shadow: 0 0 5px #ffa500; }
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+.skill-panel {
+    background: rgba(30, 30, 60, 0.9);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    border: 2px solid #4ecdc4;
+}
+
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.skill-item {
+    background: linear-gradient(145deg, #2a2a4a, #1a1a3a);
+    border: 2px solid #4ecdc4;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.skill-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+}
+
+.skill-item.on-cooldown {
+    opacity: 0.5;
+    border-color: #666;
+}
+
+.skill-item.mp-insufficient {
+    border-color: #ff6b6b;
+    opacity: 0.6;
+}
+
+.skill-item .skill-name {
+    color: #4ecdc4;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.skill-item .skill-info {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 3px;
+}
+
+.skill-item .skill-mp {
+    color: #45b7d1;
+}
+
+.skill-item .skill-cooldown {
+    color: #ff6b6b;
+}
+
+.skill-item .skill-level {
+    color: #ffd700;
+    font-size: 0.7rem;
+}
+
+.skill-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    margin-top: 3px;
+}
+
+.skill-badge.attack {
+    background: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+}
+
+.skill-badge.heal {
+    background: rgba(78, 205, 196, 0.3);
+    color: #4ecdc4;
+}
+
+.skill-badge.buff {
+    background: rgba(255, 215, 0, 0.3);
+    color: #ffd700;
+}
+
+.skill-badge.aoe {
+    background: rgba(155, 89, 182, 0.3);
+    color: #9b59b6;
+}
+
+.skill-badge.dot {
+    background: rgba(255, 165, 0, 0.3);
+    color: #ffa500;
+}
